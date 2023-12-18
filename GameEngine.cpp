@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "GameEngine.h"
 
 // functions
 void GameEngine::InitVariables()
