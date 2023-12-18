@@ -1,10 +1,12 @@
-#include <iostream>
 #include "Game.h"
 
 int main()
 {
+	// init seed for random number generator.
+	std::srand(static_cast<unsigned>(time(NULL)));
+
 	// Init Game Engine.
-	Game game;
+	GameEngine game;
 	
 	// run the program as long as the window is open
 	while (game.IsRunning())

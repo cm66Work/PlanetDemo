@@ -1,4 +1,7 @@
 ﻿  Game.cpp
+C:\Users\EricaSky\Desktop\Programming\Projects\C++\PlanetDemo\Game.cpp(196,21): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+  GameObject.cpp
+  Planet.cpp
   main.cpp
   Generating Code...
   PlanetDemo.vcxproj -> C:\Users\EricaSky\Desktop\Programming\Projects\C++\PlanetDemo\x64\Debug\PlanetDemo.exe
