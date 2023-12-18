@@ -12,6 +12,7 @@ public:
 	// overloads
 	// return a reference to the other
 	Vector2& operator=(const Vector2& other); // pos = val;
+	Vector2& operator+=(const Vector2& other); // pos += val;
 	// returns a brand new Vector2
 	Vector2 operator+(const Vector2& other); // pos + val;
 	Vector2 operator-(const Vector2& other); // pos - val;

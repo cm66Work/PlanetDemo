@@ -10,7 +10,6 @@
 #include <SFML/Audio.hpp>
 
 #include "GameObject.h"
-#include "Planet.h"
 
 /// <summary>
 /// Class that acts as the game engine
@@ -30,14 +29,8 @@ private:
 
 	// game logic
 	int points;
-	float enemySpawnTimer;
-	float enemySpawnTimerMax;
-	int maxEnemies;
 
 	// game objects
-	std::vector<sf::RectangleShape> enemies;
-	sf::RectangleShape enemy;
-
 	// keep track of all GameObjects so that we can 
 	// loop over their Update methods during runtime.
 	std::vector<GameObject*> gameObjects;
@@ -45,7 +38,6 @@ private:
 	// private functions
 	void InitVariables();
 	void InitWindow();
-	void InitEnemies();
 
 public:
 	GameEngine(); // creator
@@ -53,16 +45,17 @@ public:
 
 	// accessors
 	const bool IsRunning() const;
+	const sf::Vector2f GetMousePosition();
+	const sf::RenderWindow* GetRenderWindow();
 
 	// functions
-	void SpawnEnemies();
-
 	void PollEvents();
 	void UpdateMousePosition();
 	void Update();
 	void UpdateGameObjects();
-	void UpdateEnemies();
 	void Render();
-	void RenderEnemies();
+	void RenderGameObjects();
+
+	
 };
 

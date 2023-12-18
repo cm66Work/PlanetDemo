@@ -5,9 +5,10 @@
 
 GameObject::GameObject()
 {
-	position = Vector2();
-	scale = Vector2();
-	rotation = Vector2();
+	this->position = Vector2();
+	this->size = Vector2(100.f, 100.f);
+	this->scale = Vector2(1.f, 1.f);
+	this->rotation = Vector2();
 }
 
 GameObject::~GameObject()

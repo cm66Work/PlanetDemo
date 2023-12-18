@@ -34,6 +34,14 @@ Vector2& Vector2::operator=(const Vector2& other)
 	return *this;
 }
 
+Vector2& Vector2::operator+=(const Vector2& other)
+{
+	x += other.x;
+	y += other.y;
+
+	return *this;
+}
+
 /// <summary>
 /// Returns a new Vector2 that is the answer to 
 /// the current Vector2 + other. 

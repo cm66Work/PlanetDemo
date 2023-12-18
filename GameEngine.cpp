@@ -7,19 +7,24 @@ void GameEngine::InitVariables()
 
 	// game logic
 	this->points = 0;
-	this->enemySpawnTimer = 0.f;
-	this->enemySpawnTimerMax = 2.f;
-	this->maxEnemies = 5;
 
 	// GameObjects.
 	//this->gameObjects = std::vector<GameObject>();
 
 	// create a planet.
-	Planet* planet = new Planet();
-	this->gameObjects.push_back(planet);
-	
-	GameObject* gameObject = new GameObject();
-	this->gameObjects.push_back(gameObject);
+	//Planet* planet = new Planet();
+	//this->gameObjects.push_back(planet);
+	//
+	//GameObject* gameObject = new GameObject();
+	//this->gameObjects.push_back(gameObject);
+
+
+	// create the EnemiesManager and add it to the managed
+	// GameObjects.
+	//EnemiesManager* enemiesManager = new EnemiesManager(
+	//	10, 2.f, this
+	//);
+	//this->gameObjects.push_back(enemiesManager);
 }
 
 void GameEngine::InitWindow()
@@ -35,20 +40,12 @@ void GameEngine::InitWindow()
 	this->window->setFramerateLimit(60);
 }
 
-void GameEngine::InitEnemies()
-{
-	this->enemy.setPosition(10.f, 10.f);
-	this->enemy.setSize(sf::Vector2f(100.f, 100.f));
-	this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
-	this->enemy.setFillColor(sf::Color::Cyan);
-}
 
 // constructor -- called when we create the object in memory.
 GameEngine::GameEngine()
 {
 	this->InitVariables();
 	this->InitWindow();
-	this->InitEnemies();
 }
 
 // Destructor -- called when object is released from memory.
@@ -63,30 +60,16 @@ const bool GameEngine::IsRunning() const
 	return this->window->isOpen();
 }
 
-void GameEngine::SpawnEnemies()
+const sf::Vector2f GameEngine::GetMousePosition()
 {
-	/**
-		@return void
-
-		Spawns enemies and sets their colours and positions.
-			- sets a random position.
-			- sets a random colour.
-			- adds enemy to the vector.
-	*/
-
-	this->enemy.setPosition(
-		static_cast<float>(rand() %
-		static_cast<int>(
-			this->window->getSize().x - this->enemy.getSize().x
-			)),
-		0.f
-	); 
-
-	this->enemy.setFillColor(sf::Color::Green);
-
-	// spawn the enemy.
-	this->enemies.push_back(this->enemy);
+	return this->mousePosView;
 }
+
+const sf::RenderWindow* GameEngine::GetRenderWindow()
+{
+	return this->window;
+}
+
 
 // functions
 void GameEngine::PollEvents()
@@ -129,9 +112,6 @@ void GameEngine::Update()
 	// update the mouse position
 	this->UpdateMousePosition();
 
-	// update enemies
-	this->UpdateEnemies();
-
 	// update all GameObjects
 	this->UpdateGameObjects();
 }
@@ -148,71 +128,6 @@ void GameEngine::UpdateGameObjects()
 	}
 }
 
-void GameEngine::UpdateEnemies()
-{
-	/**
-		@return void
-
-		Updates the enemy spawn timer 
-		and triggers an enemy to spawn if
-		we are bellow the max number of enemies
-		and we have waited more then the enemySpawnTimerMax.
-
-		Moves the enemies downwards.
-		TODO:: Remove the enemy at the edge of the screen
-	*/
-
-	// Updating the time for enemy spawning.
-	if (this->enemies.size() < this->maxEnemies)
-	{
-		if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
-		{
-			this->SpawnEnemies();
-			this->enemySpawnTimer = 0.f;
-		}
-		else
-		{
-			this->enemySpawnTimer++;
-		}
-	}
-
-	// move and update the enemies. 
-	bool deleteEnemy = false;
-	for (int i = 0; i < this->enemies.size(); i++)
-	{
-		this->enemies[i].move(0.f, 5.f);
-
-		// check if clicked upon
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (
-				this->enemies[i].getGlobalBounds().contains(
-					this->mousePosView
-				))
-			{
-				deleteEnemy = true;
-
-				// Gain points for killing the enemy.
-				this->points += 10.f;
-			}
-		}
-
-		// if the enemy is past the bottom of the screen,
-		// delete them.
-		if (this->enemies[i].getPosition().y >
-			this->window->getSize().y)
-		{
-			deleteEnemy = true;
-		}
-
-		if (deleteEnemy)
-		{
-			deleteEnemy = false;
-			this->enemies.erase(this->enemies.begin() + i);
-		}
-	}
-}
-
 void GameEngine::Render()
 {
 	/* 
@@ -222,21 +137,16 @@ void GameEngine::Render()
 	* display frame in window.
 	*/
 
-
 	this->window->clear();
-
-	// TODO:: draw game objects.
-	this->RenderEnemies();
 
 	// finally display the updated render to the player.
 	this->window->display();
 }
 
-void GameEngine::RenderEnemies()
+void GameEngine::RenderGameObjects()
 {
-	// rendering all the enemies
-	for (auto& e : this->enemies)
+	for (auto& gameObject : this->gameObjects)
 	{
-		this->window->draw(e);
+		this->window->draw(gameObject->shape);
 	}
 }
