@@ -4,40 +4,26 @@
 void GameEngine::InitVariables()
 {
 	this->window = nullptr;
-
-	// game logic
-	this->points = 0;
-
-	// GameObjects.
-	//this->gameObjects = std::vector<GameObject>();
-
-	// create a planet.
-	//Planet* planet = new Planet();
-	//this->gameObjects.push_back(planet);
-	//
-	//GameObject* gameObject = new GameObject();
-	//this->gameObjects.push_back(gameObject);
-
-
-	// create the EnemiesManager and add it to the managed
-	// GameObjects.
-	//EnemiesManager* enemiesManager = new EnemiesManager(
-	//	10, 2.f, this
-	//);
-	//this->gameObjects.push_back(enemiesManager);
+	this->videoMode = new sf::VideoMode();
 }
 
 void GameEngine::InitWindow()
 {
-	this->videoMode.height = 600;
-	this->videoMode.width = 800;
+	this->videoMode->height = 600;
+	this->videoMode->width = 800;
 	this->window = new sf::RenderWindow(
-		this->videoMode,
+		*videoMode,
 		"Planet Demo",
 		sf::Style::Titlebar | sf::Style::Close
 	);
 
 	this->window->setFramerateLimit(60);
+}
+
+void GameEngine::InitPlanets()
+{
+	// Create the planets.
+	planets.push_back(new Planet(10.f, 10.f, 1.f, sf::Color::Cyan, sf::Vector2f(0,0)));
 }
 
 
@@ -46,12 +32,14 @@ GameEngine::GameEngine()
 {
 	this->InitVariables();
 	this->InitWindow();
+	this->InitPlanets();
 }
 
 // Destructor -- called when object is released from memory.
 GameEngine::~GameEngine()
 {
 	delete this->window;
+	delete this->videoMode;
 }
 
 // accessors
@@ -112,20 +100,12 @@ void GameEngine::Update()
 	// update the mouse position
 	this->UpdateMousePosition();
 
-	// update all GameObjects
-	this->UpdateGameObjects();
+	// update the planets
+	this->UpdatePlanets();
 }
 
-void GameEngine::UpdateGameObjects()
+void GameEngine::UpdatePlanets()
 {
-	if (gameObjects.size() <= 0)
-		return;
-
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		// loop through all GameObject Update() each frame.
-		gameObjects[i]->Update();
-	}
 }
 
 void GameEngine::Render()
@@ -139,14 +119,19 @@ void GameEngine::Render()
 
 	this->window->clear();
 
+	RenderPlanets();
+
 	// finally display the updated render to the player.
 	this->window->display();
 }
 
-void GameEngine::RenderGameObjects()
+void GameEngine::RenderPlanets()
 {
-	for (auto& gameObject : this->gameObjects)
+	for (Planet* p : planets)
 	{
-		this->window->draw(gameObject->shape);
+		sf::CircleShape* planetShap = new sf::CircleShape(p->radius);
+		planetShap->setFillColor(p->colour);
+		planetShap->setPosition((sf::Vector2f)this->window->getSize() * 0.5f);
+		this->window->draw(*planetShap);
 	}
 }

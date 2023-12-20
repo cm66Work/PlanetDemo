@@ -9,7 +9,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-#include "GameObject.h"
+#include "Planet.h"
 
 /// <summary>
 /// Class that acts as the game engine
@@ -20,24 +20,21 @@ private:
 	// Variables
 	// Window
 	sf::RenderWindow* window;
-	sf::VideoMode videoMode;
+	sf::VideoMode* videoMode;
 	sf::Event event;
 
 	// mouse position relative to the game window.
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
-	// game logic
-	int points;
-
-	// game objects
-	// keep track of all GameObjects so that we can 
-	// loop over their Update methods during runtime.
-	std::vector<GameObject*> gameObjects;
+	// planets
+	std::vector<Planet*> planets;
+	
 
 	// private functions
 	void InitVariables();
 	void InitWindow();
+	void InitPlanets();
 
 public:
 	GameEngine(); // creator
@@ -52,9 +49,9 @@ public:
 	void PollEvents();
 	void UpdateMousePosition();
 	void Update();
-	void UpdateGameObjects();
+	void UpdatePlanets();
 	void Render();
-	void RenderGameObjects();
+	void RenderPlanets();
 
 	
 };

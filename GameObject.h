@@ -1,9 +1,6 @@
 #pragma once
 
-#include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
 
 #include "Vector2.h"
 
@@ -18,13 +15,17 @@ public:
 	Vector2 scale;
 	Vector2 rotation;
 
+	// colours
+	sf::Color shapeColour = sf::Color::Cyan;
+
 	// GameObject Graphics.
-	sf::RectangleShape shape;
+	sf::CircleShape circleShape;
 
 
 	GameObject();
 	virtual ~GameObject();
 
+	// gets updated every frame
 	virtual void Update();
 };
 
